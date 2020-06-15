@@ -1,0 +1,9 @@
+.appContainer {
+  max-height: 500px;
+  overflow: auto;
+}
+
+.btn-caja {
+  background-color: #e3f2fd !important;
+  border: 1px solid #69bffe !important;
+}
