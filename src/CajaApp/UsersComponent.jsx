@@ -1,3 +1,4 @@
+import $ from 'jquery'
 import React, { Component } from "react";
 import AuthenticationService from "./../APIs/AuthenticationService.js";
 import UserService from "./../APIs/UserService.js";
@@ -8,11 +9,15 @@ class UsersComponent extends Component {
     super(props);
 
     this.state = {
-      users: []
+      users: [],
+      terget: '',
+      disable: false
     };
 
     this.showUser = this.showUser.bind(this);
     this.newUser = this.newUser.bind(this);
+    this.getAllUsers = this.getAllUsers.bind(this)
+    this.confirmedDeleteUser = this.confirmedDeleteUser.bind(this)
   }
 
   componentDidMount() {
@@ -20,6 +25,7 @@ class UsersComponent extends Component {
 
     if (UserService.isUserAdmin(username)) {
       const users = UserService.getUsers()
+      // eslint-disable-next-line
         .map(user => {
           if (user.username !== username) {
             return user;
@@ -33,8 +39,40 @@ class UsersComponent extends Component {
     }
   }
 
+  getAllUsers() {
+    const username = AuthenticationService.getLoggedInUser();
+
+    const users = UserService.getUsers()
+    // eslint-disable-next-line
+      .map(user => {
+        if (user.username !== username) {
+          return user;
+        }
+      })
+      .filter(x => x);
+
+    this.setState({ users });
+  }
+
   showUser(username) {
     this.props.history.push(`/usuarios/${btoa(username)}`);
+  }
+
+  deleteUser(username) {
+    if (username === AuthenticationService.getLoggedInUser()) {
+      return false
+    }
+
+    this.setState({ target: username })
+    $('#customModal').modal('show');
+  }
+
+  confirmedDeleteUser() {
+    if (UserService.deleteUser(this.state.target)) {
+      this.getAllUsers()
+    }
+
+    $('#customModal').modal('hide');
   }
 
   newUser() {
@@ -45,6 +83,25 @@ class UsersComponent extends Component {
     return (
       <div className="domain">
         <h2>Administrar usuarios</h2>
+        <div className="modal fade" id="customModal" tabIndex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title" id="exampleModalLabel">Eliminar usuario</h5>
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div className="modal-body">
+									¿Est&aacute; seguro de eliminar a {this.state.target}?
+								</div>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+									<button type="button" className="btn btn-danger" onClick={this.confirmedDeleteUser}>Eliminar</button>
+								</div>
+							</div>
+						</div>
+					</div>
         <div className="container">
           <div className="row float-center">
             {this.state.errorMessage && (
@@ -91,14 +148,14 @@ class UsersComponent extends Component {
                       <td>
                         <button
                           type="button"
-                          className="btn btn-success mr-1"
+                          className="btn btn-success mr-1 mb-1"
                           onClick={() => this.showUser(user.username)}
                         >
                           Ver
                         </button>
                         <button
                           type="button"
-                          className="btn btn-danger mr-1"
+                          className="btn btn-danger mr-1 mb-1"
                           onClick={() => this.deleteUser(user.username)}
                         >
                           Eliminar

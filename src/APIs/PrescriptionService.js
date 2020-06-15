@@ -338,7 +338,7 @@ class PrescriptionService {
 
   getPrescriptionListById(id) {
     return {
-      ...STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === id)
+      ...STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(id))
     };
   }
 
@@ -387,6 +387,32 @@ class PrescriptionService {
       time = "1h 30m";
     }
     return time;
+  }
+
+  updateCategory(id, category) {
+    let result = true
+
+    try {
+      let prescription = STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(id))
+      prescription.category = atob(category)
+    } catch (e) {
+      result = false
+    }
+    
+    return result
+  }
+
+  updateOwner(id, owner) {
+    let result = true
+
+    try {
+      let prescription = STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(id))
+      prescription.owner = atob(owner)
+    } catch (e) {
+      result = false
+    }
+
+    return result
   }
 }
 

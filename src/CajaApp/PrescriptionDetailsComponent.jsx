@@ -1,12 +1,14 @@
+import $ from 'jquery'
 import React, { Component } from "react";
 import PrescriptionService from "./../APIs/PrescriptionService.js";
 import PrescriptionHelper from "./../Helpers/PrescriptionHelper.js";
+import AuthenticationService from '../APIs/AuthenticationService.js'
 
 class PrescriptionDetailsComponent extends Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
+		this.state = {
 			id: 0,
 			drugs: [],
 			prescription: {
@@ -23,25 +25,63 @@ class PrescriptionDetailsComponent extends Component {
 			updateError: false
 		}
 
-    this.goBack = this.goBack.bind(this);
-  }
+		this.atend = this.atend.bind(this)
+		this.goBack = this.goBack.bind(this)
+		this.changeCategory = this.changeCategory.bind(this)
+		this.setAssigned = this.setAssigned.bind(this)
+	}
 
-  componentDidMount() {
-    const id = atob(this.props.match.params.id);
-    let prescription = PrescriptionService.getPrescriptionListById(
-      parseInt(id)
-    );
-    let drugs = [];
+	componentDidMount() {
+		let role = false
+		let asign = false
+		const id = atob(this.props.match.params.id);
+		let prescription = PrescriptionService.getPrescriptionListById(
+			parseInt(id)
+		);
+		let drugs = [];
 
-    if (prescription) {
-      drugs = prescription.medicates;
-      delete prescription.medicates;
-    }
+		if (prescription) {
+			drugs = prescription.medicates;
+			delete prescription.medicates;
+		}
 
-    this.setState({ id, drugs, prescription });
-  }
+		if (['secretaria', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
+			role = true
+		}
 
-  atend() {
+		if (['tecnico', 'farma', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
+			asign = true
+		}
+
+		this.setState({ id, drugs, prescription, role, asign });
+	}
+
+	changeCategory(e) {
+		let prescription = this.state.prescription
+		prescription.category = e.target.value
+
+		this.setState({ prescription, disable: true, updateSuccess: false, updateError: false })
+
+		// Update prescription category
+		if (PrescriptionService.updateCategory(this.state.id, btoa(prescription.category))) {
+			setTimeout(() => {
+				this.setState({ updateSuccess: true })
+				this.setState({ disable: false })
+			}, 500)
+		}
+	}
+
+	setAssigned() {
+		this.setState({ updateSuccess: false, updateError: false })
+		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUserName()))) {
+			setTimeout(() => {
+				this.setState({ updateSuccess: true, asign: false })
+				$('#customModal').modal('show');
+			}, 500)
+		}
+	}
+
+	atend() {
 		$('#customModal').modal('hide');
 		this.props.history.push(`/receta/${btoa(this.state.id)}`)
 	}

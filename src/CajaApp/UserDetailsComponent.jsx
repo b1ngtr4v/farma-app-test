@@ -53,6 +53,7 @@ class UserDetailsComponent extends Component {
     const phone = e.target.value;
 
     if (phone.length) {
+      // eslint-disable-next-line
       /^(\d){4}-(\d){4}$/.test(phone)
         ? e.target.setCustomValidity("")
         : e.target.setCustomValidity("invalid");
@@ -63,6 +64,7 @@ class UserDetailsComponent extends Component {
     const mail = e.target.value;
 
     if (mail.length) {
+      // eslint-disable-next-line
       /\b[\w\.-]+@[\w\.-]+\.\w{2,4}\b/.test(mail)
         ? e.target.setCustomValidity("")
         : e.target.setCustomValidity("invalid");
@@ -236,7 +238,7 @@ class UserDetailsComponent extends Component {
             <div className="form-group">
               <div className="form-row my-2">
                 <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-                  <label htmlFor="mail">Correo Electr&oacute;nico</label>
+                  <label htmlFor="mail">Correo electr&oacute;nico</label>
                   <input
                     type="email"
                     className="form-control"

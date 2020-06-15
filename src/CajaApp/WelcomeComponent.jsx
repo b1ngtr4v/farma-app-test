@@ -46,7 +46,7 @@ class WelcomeComponent extends Component {
               Seleccione una l&iacute;nea de trabajo
             </div>
           )}
-          <p>Seleccione la l&iacute;nea de trabajo a atender</p>
+          <p>Seleccione la l&iacute;nea de acopio</p>
           {this.state.lines.map(line => {
             return (
               <button

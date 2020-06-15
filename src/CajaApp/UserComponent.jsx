@@ -133,7 +133,7 @@ class UserComponent extends Component {
 						<div className="form-group">
 							<div className="form-row my-2">
 								<div className="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-									<label htmlFor="mail">Correo Electr&oacute;nico</label>
+									<label htmlFor="mail">Correo electr&oacute;nico</label>
 									<input type="email" className="form-control" id="mail" maxLength="30" onChange={this.handleTextChange} onBlur={this.validateMail} value={this.state.mail} required />
 									<div className="invalid-feedback">
 										Ingrese un correo v&aacute;lido (usuario@servidor.com).

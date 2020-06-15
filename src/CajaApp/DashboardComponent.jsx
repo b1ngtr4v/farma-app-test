@@ -114,7 +114,7 @@ class DashboardComponent extends Component {
               </div>
             </div>
             <div className="container">
-              <div className="text-center">
+              <div className="text-center mb-2">
                 <button
                   type="button"
                   className="btn btn-primary"

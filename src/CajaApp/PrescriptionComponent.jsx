@@ -14,8 +14,7 @@ class PrescriptionComponent extends Component {
         queue: null,
         date: null,
         status: ""
-      },
-      comment: ""
+      }
     };
 
     this.savePrescription = this.savePrescription.bind(this);
@@ -148,18 +147,7 @@ class PrescriptionComponent extends Component {
             </div>
             {this.state.drugs && (
               <div className="row mb-2 text-left">
-                <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8">
-                  <label htmlFor="comment">Comentario</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="comment"
-                    placeholder="Comentario..."
-                    maxLength="250"
-                    value={this.state.comment}
-                    onChange={this.handleTextChange}
-                  />
-                </div>
+                <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8"></div>
                 <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                   <label htmlFor="status">Estado</label>
                   <select

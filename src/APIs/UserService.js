@@ -17,7 +17,7 @@ export let STATIC_USER_INFORMATION = [
     ident: "06-0230-0114",
     phone: "7429-1213",
     mail: "mdelgado@ccss.go.cr",
-    job: "Farmaceutico",
+    job: "Farmacéutico",
     role: "farma",
     currentPassword: "pass"
   },
@@ -159,6 +159,21 @@ class UserService {
     }
 
     return result;
+  }
+
+  deleteUser(username) {
+    let result = true
+    try {
+      for (let i = 0; i < STATIC_USER_INFORMATION.length; i++) {
+        if (STATIC_USER_INFORMATION[i].username === username) {
+          STATIC_USER_INFORMATION.splice(i, 1)
+        }
+      }
+    } catch (e) {
+      result = false
+    }
+
+    return result
   }
 
   getRoleDetail(role) {
