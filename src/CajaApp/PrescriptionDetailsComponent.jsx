@@ -73,7 +73,7 @@ class PrescriptionDetailsComponent extends Component {
 
 	setAssigned() {
 		this.setState({ updateSuccess: false, updateError: false })
-		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUserName()))) {
+		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUser()))) {
 			setTimeout(() => {
 				this.setState({ updateSuccess: true, asign: false })
 				$('#customModal').modal('show');

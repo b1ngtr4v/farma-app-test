@@ -4,56 +4,22 @@ const STATIC_PRESCRIPTION_LIST = [
   {
     id: 1,
     category: "urgent",
-    classType: "special",
+    classType: "normal",
     queue: "fast",
-    createdDate: "2020-06-09T16:13:33.366+00:00",
-    dueDate: "2020-06-09T16:13:33.366+00:00",
-    owner: "",
-    status: "Waiting",
-    medicates: [
-      {
-        id: 2,
-        name: "Salbutamol",
-        quantity: 1,
-        methric: "Bombita",
-        checked: false
-      },
-      {
-        id: 2,
-        name: "Salbutamol",
-        quantity: 1,
-        methric: "Bombita",
-        checked: false
-      },
-      {
-        id: 3,
-        name: "Salbutamol",
-        quantity: 2,
-        methric: "Bombita",
-        checked: false
-      },
-      {
-        id: 2,
-        name: "Salbutamol",
-        quantity: 1,
-        methric: "Bombita",
-        checked: false
-      },
-      {
-        id: 1,
-        name: "Ibuprofeno",
-        quantity: 30,
-        methric: "Pastillas",
-        checked: false
-      },
-      {
-        id: 1,
-        name: "Ibuprofeno",
-        quantity: 30,
-        methric: "Pastillas",
-        checked: false
-      }
-    ],
+    createdDate: "2020-06-15T14:39:39.254+00:00",
+    dueDate: "2020-06-15T14:39:39.254+00:00",
+    owner: "bsalas",
+    status: "Backlog",
+    medicates: [{
+      id: 5,
+      name: "Vitamina C",
+      quantity: 15,
+      presentation: "Pastillas",
+      freqType: "Crónico",
+      classType: "Regular",
+      rangeType: "No Pediátrico",
+      checked: false
+    }],
     comments: null
   },
   {
@@ -70,42 +36,42 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 3,
         name: "Salbutamol",
         quantity: 2,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 3,
         name: "Salbutamol",
         quantity: 2,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       }
     ],
@@ -125,21 +91,21 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 3,
         name: "Salbutamol",
         quantity: 2,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
@@ -153,7 +119,7 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       }
     ],
@@ -173,14 +139,14 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       }
     ],
@@ -200,28 +166,28 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       }
     ],
@@ -241,21 +207,21 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 3,
         name: "Salbutamol",
         quantity: 2,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       }
     ],
@@ -275,21 +241,21 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       }
     ],
@@ -309,21 +275,21 @@ const STATIC_PRESCRIPTION_LIST = [
         id: 3,
         name: "Salbutamol",
         quantity: 2,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
-        methric: "Bombita",
+        presentation: "Bombita",
         checked: false
       },
       {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
-        methric: "Pastillas",
+        presentation: "Pastillas",
         checked: false
       }
     ],
@@ -389,6 +355,22 @@ class PrescriptionService {
     return time;
   }
 
+  update(prescriptionUpdated) {
+    let result = true
+    prescriptionUpdated.id = parseInt(prescriptionUpdated.id)
+
+    try {
+      let prescription = STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(prescriptionUpdated.id))
+      const index = STATIC_PRESCRIPTION_LIST.indexOf(prescription)
+
+      STATIC_PRESCRIPTION_LIST[index] = prescriptionUpdated
+    } catch (e) {
+      result = false
+    }
+
+    return result
+  }
+
   updateCategory(id, category) {
     let result = true
 
@@ -398,7 +380,7 @@ class PrescriptionService {
     } catch (e) {
       result = false
     }
-    
+
     return result
   }
 
@@ -407,7 +389,10 @@ class PrescriptionService {
 
     try {
       let prescription = STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(id))
+      const index = STATIC_PRESCRIPTION_LIST.indexOf(prescription)
       prescription.owner = atob(owner)
+
+      STATIC_PRESCRIPTION_LIST[index] = prescription
     } catch (e) {
       result = false
     }
