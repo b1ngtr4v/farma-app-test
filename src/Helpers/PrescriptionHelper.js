@@ -107,6 +107,17 @@ class PrescriptionHelper {
     return name;
   }
 
+  getStatusName(statusId) {
+    let result = ''
+    const status = STATIC_PRESCRIPTION_STATUS.find(status => status.id = statusId)
+
+    if(status) {
+      result = status.name
+    }
+    
+    return result
+  }
+
   getClassTypeName(classType) {
     return STATIC_CLASSTYPE_LIST[classType];
   }

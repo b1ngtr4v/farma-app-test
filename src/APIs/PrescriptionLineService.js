@@ -6,7 +6,11 @@ class PrescriptionLineService {
     }
 
     getPrescriptionLine() {
-        const line = sessionStorage.getItem(PRESCRIPTION_LINE_SESSION_ATTRIBUTE_NAME)
+        let line = ''
+        
+        if(sessionStorage.getItem(PRESCRIPTION_LINE_SESSION_ATTRIBUTE_NAME) !== null) {
+            line = sessionStorage.getItem(PRESCRIPTION_LINE_SESSION_ATTRIBUTE_NAME)
+        }
 
         return line.length > 0 ? atob(line) : 'none'
     }

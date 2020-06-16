@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import PrescriptionLineService from "./../APIs/PrescriptionLineService.js";
-import PrescriptionService from "./../APIs/PrescriptionService.js";
+import AuthenticationService from "./../APIs/AuthenticationService.js";
 import PrescriptionHelper from "./../Helpers/PrescriptionHelper.js";
+import PrescriptionService from "./../APIs/PrescriptionService.js";
 import "./../css/Main.css";
 
 class DashboardComponent extends Component {
@@ -9,48 +10,39 @@ class DashboardComponent extends Component {
     super(props);
 
     this.state = {
-      line: "",
       prescriptions: [],
       records: {
         totalToday: "25",
         attendedToday: "10",
         normalTime: "1h 30m",
         fastTime: "30m"
-      }
+      },
+      showStatus: false,
+      showImport: false
     };
 
-    this.refreshList = this.refreshList.bind(this);
     this.showTask = this.showTask.bind(this);
   }
 
   componentDidMount() {
-    let line = "";
+    const role = AuthenticationService.getLoggedInUserRole()
 
-    if (
-      PrescriptionLineService.isPrescriptionLineDefined() &&
-      PrescriptionLineService.getPrescriptionLine() !== "none"
-    ) {
-      line = PrescriptionLineService.getPrescriptionLine();
-      this.setState({ line });
-    } else {
+    if (role === 'tecnico' && PrescriptionLineService.getPrescriptionLine() === "none") {
       this.props.history.push("/bienvenido/" + btoa("error"));
     }
 
-    this.setState({
-      prescriptions: PrescriptionService.getPrescriptionListByLine(line)
-    });
-    this.refreshList();
-  }
-
-  refreshList() {
+    const line = PrescriptionLineService.getPrescriptionLine()
+    const prescriptions = PrescriptionService.getAllPrescriptionListByRole(role, line)
+    const showStatus = ['farma','admin'].indexOf(role) >= 0
+    const showImport = ['tecnico', 'secretaria','admin'].indexOf(role) >= 0
     const records = {
       totalToday: PrescriptionService.getRecordsLogByStatus("total"),
       attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
       normalTime: PrescriptionService.getTimeByLine("normal"),
       fastTime: PrescriptionService.getTimeByLine("fast")
     };
-
-    this.setState({ records });
+    
+    this.setState({ prescriptions, showStatus, showImport, records })
   }
 
   showTask(id) {
@@ -60,7 +52,7 @@ class DashboardComponent extends Component {
   render() {
     return (
       <div className="domain">
-        <div className="row">
+        <div className="row w-100">
           <div className="col-xs-12 col-sm-12 col-md-3 col-lg-4 order-sm-1 order-md-12">
             <div className="container">
               <h4>Registros</h4>
@@ -113,7 +105,7 @@ class DashboardComponent extends Component {
                 </div>
               </div>
             </div>
-            <div className="container">
+            {this.state.showImport && <div className="container">
               <div className="text-center mb-2">
                 <button
                   type="button"
@@ -125,7 +117,7 @@ class DashboardComponent extends Component {
                   Importar recetas
                 </button>
               </div>
-            </div>
+            </div>}
           </div>
           <div className="col-xs-12 col-sm-12 col-md-9 col-lg-8 order-sm-12 order-md-1">
             <h3>Recetas</h3>
@@ -137,6 +129,7 @@ class DashboardComponent extends Component {
                       <th># consecutivo</th>
                       <th>Categor&iacute;a</th>
                       <th>L&iacute;nea</th>
+                      {this.state.showStatus && <th>Estado</th>}
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -152,6 +145,9 @@ class DashboardComponent extends Component {
                         <td>
                           {PrescriptionHelper.getQueueName(prescription.queue)}
                         </td>
+                        {this.state.showStatus && <td>
+                          {PrescriptionHelper.getStatusName(prescription.status)}
+                        </td>}
                         <td>
                           <button
                             type="button"

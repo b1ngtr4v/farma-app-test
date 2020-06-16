@@ -1,5 +1,3 @@
-//import PrescriptionHelper from "../Helpers/PrescriptionHelper";
-
 const STATIC_PRESCRIPTION_LIST = [
   {
     id: 1,
@@ -8,7 +6,7 @@ const STATIC_PRESCRIPTION_LIST = [
     queue: "fast",
     createdDate: "2020-06-15T14:39:39.254+00:00",
     dueDate: "2020-06-15T14:39:39.254+00:00",
-    owner: "bsalas",
+    owner: "",
     status: "Backlog",
     medicates: [{
       id: 5,
@@ -30,13 +28,16 @@ const STATIC_PRESCRIPTION_LIST = [
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
     owner: "",
-    status: "Waiting",
+    status: "Backlog",
     medicates: [
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -44,6 +45,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 2,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -51,6 +55,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -58,6 +65,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -65,6 +75,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 2,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -72,6 +85,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -85,13 +101,16 @@ const STATIC_PRESCRIPTION_LIST = [
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
     owner: "",
-    status: "Waiting",
+    status: "Backlog",
     medicates: [
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -99,6 +118,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -106,6 +128,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 2,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -113,6 +138,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         methric: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -133,13 +161,16 @@ const STATIC_PRESCRIPTION_LIST = [
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
     owner: "",
-    status: "Waiting",
+    status: "Backlog",
     medicates: [
       {
         id: 2,
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -147,6 +178,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -159,14 +193,17 @@ const STATIC_PRESCRIPTION_LIST = [
     queue: "fast",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
-    owner: "ehidalgo",
-    status: "Waiting",
+    owner: "",
+    status: "Backlog",
     medicates: [
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -174,6 +211,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -181,6 +221,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -188,6 +231,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -200,14 +246,17 @@ const STATIC_PRESCRIPTION_LIST = [
     queue: "normal",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
-    owner: "bsalas",
-    status: "Waiting",
+    owner: "",
+    status: "Backlog",
     medicates: [
       {
         id: 3,
         name: "Salbutamol",
         quantity: 2,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -215,6 +264,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -222,6 +274,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -234,14 +289,17 @@ const STATIC_PRESCRIPTION_LIST = [
     queue: "fast",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
-    owner: "ehidalgo",
-    status: "Waiting",
+    owner: "",
+    status: "Backlog",
     medicates: [
       {
         id: 4,
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -249,6 +307,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -256,6 +317,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -268,14 +332,17 @@ const STATIC_PRESCRIPTION_LIST = [
     queue: "normal",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
-    owner: "ehidalgo",
-    status: "Waiting",
+    owner: "",
+    status: "Backlog",
     medicates: [
       {
         id: 3,
         name: "Salbutamol",
         quantity: 2,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -283,6 +350,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Salbutamol",
         quantity: 1,
         presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       },
       {
@@ -290,6 +360,9 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 30,
         presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
         checked: false
       }
     ],
@@ -300,6 +373,39 @@ const STATIC_PRESCRIPTION_LIST = [
 class PrescriptionService {
   getAllPrescriptionList() {
     return STATIC_PRESCRIPTION_LIST;
+  }
+
+  getAllPrescriptionListByRole(role, line) {
+    let result
+
+    switch (role) {
+      case 'farma':
+        
+        result = STATIC_PRESCRIPTION_LIST.map(prescription => {
+          if (prescription.owner.length === 0 && ((prescription.classType === 'special' && prescription.status === 'Backlog') || prescription.status === 'Waiting')) {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
+        break;
+
+      case 'tecnico':
+        result = this.getPrescriptionListByLine(line).map(prescription => {
+          if (prescription.status === 'Backlog' && prescription.owner.length === 0) {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
+      break;
+
+      default:
+        result = this.getAllPrescriptionList()
+        break;
+    }
+
+    return result
   }
 
   getPrescriptionListById(id) {

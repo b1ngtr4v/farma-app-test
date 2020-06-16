@@ -141,6 +141,8 @@ class PrescriptionDetailsComponent extends Component {
 					</div>
 				</div>
 				<div className="container col-xs-12 col-sm-12 col-md-6 col-lg-6">
+					{canTake && <button type="button" className="btn btn-success float-right mb-2" onClick={this.setAssigned} disabled={this.state.disable}>Asignarme</button>}
+					{!canTake && <button type="button" className="btn btn-danger float-right mb-2" disabled>Ya Asignado</button>}
 					<form>
 						<div className="m-2">
 							{this.state.drugs && this.state.drugs.map((drug, index) => {
@@ -154,18 +156,18 @@ class PrescriptionDetailsComponent extends Component {
 														<p>
 															<b>Medicamento</b>: {drug.name}
 															<br />
-															<b>Frecuencia</b>: {drug.freqType}
+															<b>Cantidad</b>: {drug.quantity}
 															<br />
-															<b>Rango</b>: {drug.rangeType}
+															<b>Presentaci&oacute;n</b>: {drug.presentation}
 														</p>
 													</div>
 													<div className="col-sm-5">
 														<p>
 															<b>Clase</b>: {drug.classType}
 															<br />
-															<b>Cantidad</b>: {drug.quantity}
+															<b>Frecuencia</b>: {drug.freqType}
 															<br />
-															<b>Presentaci&oacute;n</b>: {drug.presentation}
+															<b>Rango</b>: {drug.rangeType}
 														</p>
 													</div>
 												</div>
@@ -177,8 +179,6 @@ class PrescriptionDetailsComponent extends Component {
 							{!this.state.drugs && <div>No se obtuvo informaci&oacute;n sobre esta receta</div>}
 						</div>
 						<button type="button" className="btn btn-primary float-left" onClick={this.goBack} disabled={this.state.disable}>Cerrar</button>
-						{canTake && <button type="button" className="btn btn-success float-right" onClick={this.setAssigned} disabled={this.state.disable}>Asignarme</button>}
-						{!canTake && <button type="button" className="btn btn-danger float-right" disabled>Ya Asignado</button>}
 					</form>
 				</div>
 			</div>

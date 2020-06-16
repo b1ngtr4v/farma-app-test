@@ -297,12 +297,14 @@ class UserDetailsComponent extends Component {
               Atr&aacute;s
             </button>
             {!this.state.newUser && (
-              <button type="submit" className="btn btn-success float-right">
+              <button type="submit" className="btn btn-success float-right" 
+              disabled={this.state.block}>
                 Guardar Perfil
               </button>
             )}
             {this.state.newUser && (
-              <button type="submit" className="btn btn-success float-right">
+              <button type="submit" className="btn btn-success float-right" 
+              disabled={this.state.block}>
                 Crear Perfil
               </button>
             )}

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import Password from './PasswordComponent'
+import UserHelper from '../Helpers/UserHelper.js'
 import UserService from './../APIs/UserService.js'
 import AuthenticationService from './../APIs/AuthenticationService.js'
 
@@ -143,11 +144,11 @@ class UserComponent extends Component {
 							<div className="form-row my-2">
 								<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 									<label htmlFor="job">Puesto de trabajo</label>
-									<input type="text" className="form-control" id="job" maxLength="40" onChange={this.handleTextChange} value={this.state.job} required />
+									<input type="text" className="form-control" id="job" value={this.state.job} readOnly />
 								</div>
 								<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 									<label htmlFor="role">Tipo de acceso</label>
-									<input type="text" className="form-control" id="role" value={this.state.role} readOnly />
+									<input type="text" className="form-control" id="role" value={UserHelper.getRoleName(this.state.role)} readOnly />
 								</div>
 							</div>
 						</div>

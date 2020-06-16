@@ -7,11 +7,10 @@ import AuthenticationService from "./../APIs/AuthenticationService.js";
 class HeaderComponent extends Component {
   render() {
     const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-    const isUserAdmin =
-      isUserLoggedIn && AuthenticationService.getLoggedInUserRole() === "admin";
-    const isUserSecretaria =
-      isUserLoggedIn &&
-      AuthenticationService.getLoggedInUserRole() === "secretaria";
+    const role = AuthenticationService.getLoggedInUserRole()
+    const isUserAdmin = isUserLoggedIn && role === "admin";
+    const isUserSecretaria = isUserLoggedIn && role === "secretaria";
+    const showLine = ['farma', 'secretaria', 'admin'].indexOf(role) < 0;
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light caja-color">
@@ -39,11 +38,11 @@ class HeaderComponent extends Component {
                   Dashboard
                 </NavLink>
               </li>
-              <li className="nav-item">
+              {showLine && <li className="nav-item">
                 <NavLink to="/bienvenido" className="nav-link">
                   Linea
                 </NavLink>
-              </li>
+              </li>}
               {!isUserSecretaria && (
                 <li className="nav-item">
                   <NavLink to="/recetas" className="nav-link">

@@ -53,7 +53,11 @@ class AuthenticationService {
   }
 
   getLoggedInUserRole() {
-    const role = sessionStorage.getItem(ROLE_SESSION_ATTRIBUTE_NAME);
+    let role = ''
+    
+    if(sessionStorage.getItem(ROLE_SESSION_ATTRIBUTE_NAME) !== null) {
+      role = sessionStorage.getItem(ROLE_SESSION_ATTRIBUTE_NAME)
+    }
 
     return role.length > 0 ? atob(role) : "";
   }

@@ -44,7 +44,7 @@ class PrescriptionBaseComponent extends Component {
             parseInt(id)
         );
         let drugs = [];
-
+        
         if (prescription) {
             drugs = prescription.medicates;
             delete prescription.medicates;
