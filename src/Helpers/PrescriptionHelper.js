@@ -11,8 +11,8 @@ const STATIC_CLASSTYPE_LIST = {
 const STATIC_QUEUE_LIST = [
   { pseudo: "fast", name: "Línea rápida", roles: ['tecnico',] },
   { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] },
-  { pseudo: "special", name: "Revisión de recetas", roles: ['farma'] },
-  { pseudo: "waiting", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
+  { pseudo: "waiting", name: "Revisión de recetas", roles: ['farma'] },
+  { pseudo: "special", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
   { pseudo: "admin", name: "Dashboard", roles: ['admin'] }
 ];
 
