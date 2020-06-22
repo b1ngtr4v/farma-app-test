@@ -1,8 +1,8 @@
 const STATIC_PRESCRIPTION_LIST = [
   {
     id: 1,
-    category: "urgent",
-    classType: "normal",
+    category: "normal",
+    classType: "special",
     queue: "fast",
     createdDate: "2020-06-15T14:39:39.254+00:00",
     dueDate: "2020-06-15T14:39:39.254+00:00",
@@ -112,43 +112,6 @@ const STATIC_PRESCRIPTION_LIST = [
         classType: "Regular",
         rangeType: "No Pediátrico",
         checked: false
-      },
-      {
-        id: 4,
-        name: "Ibuprofeno",
-        quantity: 10,
-        presentation: "Pastillas",
-        freqType: "Crónico",
-        classType: "Regular",
-        rangeType: "No Pediátrico",
-        checked: false
-      },
-      {
-        id: 3,
-        name: "Salbutamol",
-        quantity: 2,
-        presentation: "Bombita",
-        freqType: "Crónico",
-        classType: "Regular",
-        rangeType: "No Pediátrico",
-        checked: false
-      },
-      {
-        id: 1,
-        name: "Ibuprofeno",
-        quantity: 30,
-        methric: "Pastillas",
-        freqType: "Crónico",
-        classType: "Regular",
-        rangeType: "No Pediátrico",
-        checked: false
-      },
-      {
-        id: 4,
-        name: "Ibuprofeno",
-        quantity: 10,
-        presentation: "Pastillas",
-        checked: false
       }
     ],
     comments: null
@@ -182,14 +145,34 @@ const STATIC_PRESCRIPTION_LIST = [
         classType: "Regular",
         rangeType: "No Pediátrico",
         checked: false
+      },
+      {
+        id: 2,
+        name: "Salbutamol",
+        quantity: 1,
+        presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
+        checked: false
+      },
+      {
+        id: 1,
+        name: "Ibuprofeno",
+        quantity: 30,
+        presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
+        checked: false
       }
     ],
     comments: null
   },
   {
     id: 5,
-    category: "urgent",
-    classType: "special",
+    category: "normal",
+    classType: "normal",
     queue: "fast",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
@@ -225,16 +208,6 @@ const STATIC_PRESCRIPTION_LIST = [
         classType: "Regular",
         rangeType: "No Pediátrico",
         checked: false
-      },
-      {
-        id: 1,
-        name: "Ibuprofeno",
-        quantity: 30,
-        presentation: "Pastillas",
-        freqType: "Crónico",
-        classType: "Regular",
-        rangeType: "No Pediátrico",
-        checked: false
       }
     ],
     comments: null
@@ -242,7 +215,7 @@ const STATIC_PRESCRIPTION_LIST = [
   {
     id: 6,
     category: "normal",
-    classType: "special",
+    classType: "normal",
     queue: "normal",
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
@@ -278,13 +251,33 @@ const STATIC_PRESCRIPTION_LIST = [
         classType: "Regular",
         rangeType: "No Pediátrico",
         checked: false
+      },
+      {
+        id: 2,
+        name: "Salbutamol",
+        quantity: 1,
+        presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
+        checked: false
+      },
+      {
+        id: 1,
+        name: "Ibuprofeno",
+        quantity: 30,
+        presentation: "Pastillas",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
+        checked: false
       }
     ],
     comments: null
   },
   {
     id: 7,
-    category: "urgent",
+    category: "normal",
     classType: "normal",
     queue: "fast",
     createdDate: "2020-06-09T16:13:33.366+00:00",
@@ -297,16 +290,6 @@ const STATIC_PRESCRIPTION_LIST = [
         name: "Ibuprofeno",
         quantity: 10,
         presentation: "Pastillas",
-        freqType: "Crónico",
-        classType: "Regular",
-        rangeType: "No Pediátrico",
-        checked: false
-      },
-      {
-        id: 2,
-        name: "Salbutamol",
-        quantity: 1,
-        presentation: "Bombita",
         freqType: "Crónico",
         classType: "Regular",
         rangeType: "No Pediátrico",
@@ -356,6 +339,16 @@ const STATIC_PRESCRIPTION_LIST = [
         checked: false
       },
       {
+        id: 2,
+        name: "Salbutamol",
+        quantity: 1,
+        presentation: "Bombita",
+        freqType: "Crónico",
+        classType: "Regular",
+        rangeType: "No Pediátrico",
+        checked: false
+      },
+      {
         id: 1,
         name: "Ibuprofeno",
         quantity: 30,
@@ -380,25 +373,34 @@ class PrescriptionService {
 
     switch (role) {
       case 'farma':
-        
-        result = STATIC_PRESCRIPTION_LIST.map(prescription => {
-          if (prescription.owner.length === 0 && ((prescription.classType === 'special' && prescription.status === 'Backlog') || prescription.status === 'Waiting')) {
+        if (line === 'special') {
+          result = this.getPrescriptionListByLine('fast').map(prescription => {
+            if (prescription.status === 'Backlog' && prescription.owner.length === 0 && prescription.classType === 'special') {
+              return prescription;
+            } else {
+              return null;
+            }
+          }).filter(x => x);
+        } else {
+          result = this.getAllPrescriptionList().map(prescription => {
+            if (prescription.owner.length === 0 && prescription.status === 'Waiting') {
+              return prescription;
+            } else {
+              return null;
+            }
+          }).filter(x => x);
+        }
+        break;
+
+      case 'tecnico':
+        result = this.getPrescriptionListByLine(line).map(prescription => {
+          if (prescription.status === 'Backlog' && prescription.owner.length === 0 && prescription.classType !== 'special') {
             return prescription;
           } else {
             return null;
           }
         }).filter(x => x);
         break;
-
-      case 'tecnico':
-        result = this.getPrescriptionListByLine(line).map(prescription => {
-          if (prescription.status === 'Backlog' && prescription.owner.length === 0) {
-            return prescription;
-          } else {
-            return null;
-          }
-        }).filter(x => x);
-      break;
 
       default:
         result = this.getAllPrescriptionList()
@@ -425,15 +427,30 @@ class PrescriptionService {
   }
 
   getPrescriptionListByLine(line) {
-    let lineType = line;
-
-    return STATIC_PRESCRIPTION_LIST.map(prescription => {
-      if (prescription.queue === lineType) {
-        return prescription;
-      } else {
-        return null;
+    return this.getPrescriptionListByClassType().map(prescription => {
+      if (prescription.queue === line) {
+        return prescription
       }
-    }).filter(x => x);
+
+      return null
+    }).filter(x => x)
+  }
+
+  getPrescriptionListByClassType() {
+    let normal = []
+    let urgent = []
+
+    STATIC_PRESCRIPTION_LIST.map(prescription => {
+      if (prescription.category === 'urgent') {
+        urgent.push(prescription)
+      } else {
+        normal.push(prescription)
+      }
+
+      return null
+    })
+
+    return urgent.concat(normal);
   }
 
   // Change by amount

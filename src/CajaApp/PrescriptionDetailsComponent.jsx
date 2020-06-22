@@ -74,10 +74,19 @@ class PrescriptionDetailsComponent extends Component {
 	setAssigned() {
 		this.setState({ updateSuccess: false, updateError: false })
 		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUser()))) {
+			this.setState({ updateSuccess: true, asign: false })
+			
+			setTimeout(() => {
+				this.props.history.push(`/receta/${btoa(this.state.id)}`)
+			}, 1000)
+
+			/*
+			// Se comenta, permite realizar una confirmación de atención
 			setTimeout(() => {
 				this.setState({ updateSuccess: true, asign: false })
 				$('#customModal').modal('show');
 			}, 500)
+			*/
 		}
 	}
 

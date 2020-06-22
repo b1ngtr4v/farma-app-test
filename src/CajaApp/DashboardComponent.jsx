@@ -18,10 +18,12 @@ class DashboardComponent extends Component {
         fastTime: "30m"
       },
       showStatus: false,
-      showImport: false
+      showImport: false,
+      timeoutId: null
     };
 
     this.showTask = this.showTask.bind(this);
+    this.getTasks = this.getTasks.bind(this);
   }
 
   componentDidMount() {
@@ -31,22 +33,36 @@ class DashboardComponent extends Component {
       this.props.history.push("/bienvenido/" + btoa("error"));
     }
 
+    const showStatus = ['farma', 'admin'].indexOf(role) >= 0
+    const showImport = ['tecnico', 'secretaria', 'admin'].indexOf(role) >= 0
+
+    this.setState({ showStatus, showImport })
+    this.getTasks(role)
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.state.timeoutId)
+  }
+
+  showTask(id) {
+    this.props.history.push(`/receta/detalles/${btoa(id)}`);
+  }
+
+  getTasks(role) {
     const line = PrescriptionLineService.getPrescriptionLine()
     const prescriptions = PrescriptionService.getAllPrescriptionListByRole(role, line)
-    const showStatus = ['farma','admin'].indexOf(role) >= 0
-    const showImport = ['tecnico', 'secretaria','admin'].indexOf(role) >= 0
     const records = {
       totalToday: PrescriptionService.getRecordsLogByStatus("total"),
       attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
       normalTime: PrescriptionService.getTimeByLine("normal"),
       fastTime: PrescriptionService.getTimeByLine("fast")
     };
-    
-    this.setState({ prescriptions, showStatus, showImport, records })
-  }
 
-  showTask(id) {
-    this.props.history.push(`/receta/detalles/${btoa(id)}`);
+    const timeoutId = setTimeout(() => {
+      this.getTasks(role)
+    }, 180000)
+
+    this.setState({ prescriptions, records, timeoutId })
   }
 
   render() {
@@ -128,8 +144,8 @@ class DashboardComponent extends Component {
                     <tr>
                       <th># consecutivo</th>
                       <th>Categor&iacute;a</th>
-                      <th>L&iacute;nea</th>
-                      {this.state.showStatus && <th>Estado</th>}
+                      {!this.state.showStatus && <th>L&iacute;nea</th>}
+                      {!this.state.showStatus && <th>Estado</th>}
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -142,10 +158,10 @@ class DashboardComponent extends Component {
                             prescription.category
                           )}
                         </td>
-                        <td>
+                        {!this.state.showStatus && <td>
                           {PrescriptionHelper.getQueueName(prescription.queue)}
-                        </td>
-                        {this.state.showStatus && <td>
+                        </td>}
+                        {!this.state.showStatus && <td>
                           {PrescriptionHelper.getStatusName(prescription.status)}
                         </td>}
                         <td>

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AuthenticationService from "./../APIs/AuthenticationService.js";
 import PrescriptionLineService from "./../APIs/PrescriptionLineService.js";
 import PrescriptionHelper from "../Helpers/PrescriptionHelper.js";
-import { Link } from "react-router-dom";
 
 class WelcomeComponent extends Component {
   constructor(props) {
@@ -21,7 +20,7 @@ class WelcomeComponent extends Component {
 
   componentDidMount() {
     let error = false;
-    let showSelect = AuthenticationService.getLoggedInUserRole() === 'tecnico'
+    let role = AuthenticationService.getLoggedInUserRole()
 
     if (this.props.match.params.status) {
       error = true;
@@ -30,8 +29,8 @@ class WelcomeComponent extends Component {
     this.setState({
       username: AuthenticationService.getLoggedInUser(),
       error,
-      lines: PrescriptionHelper.getLines(),
-      showSelect
+      lines: PrescriptionHelper.getLines(role),
+      showSelect: role === 'tecnico'
     });
   }
 
@@ -51,7 +50,8 @@ class WelcomeComponent extends Component {
             </div>
           )}
           {this.state.showSelect && <p>Seleccione la l&iacute;nea de acopio</p>}
-          {this.state.showSelect && this.state.lines.map(line => {
+          {!this.state.showSelect && <p>Ingrese al dashboard para ver las recetas por atender</p>}
+          {this.state.lines.map(line => {
             return (
               <button
                 type="button"
@@ -65,8 +65,6 @@ class WelcomeComponent extends Component {
               </button>
             );
           })}
-          {!this.state.showSelect && <p>Ingrese al dashboard para ver las recetas por atender</p>}
-          {!this.state.showSelect && <Link className="btn btn-success col-xs-8 col-sm-8 col-md-5 col-lg-5 m-1" to="/dashboard" style={{ padding: "15px" }}>Dashboard</Link>}
         </div>
       </div>
     );

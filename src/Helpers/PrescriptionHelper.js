@@ -9,30 +9,43 @@ const STATIC_CLASSTYPE_LIST = {
 };
 
 const STATIC_QUEUE_LIST = [
-  { pseudo: "fast", name: "Línea rápida" },
-  { pseudo: "normal", name: "Línea alto volúmen" }
+  { pseudo: "fast", name: "Línea rápida", roles: ['tecnico',] },
+  { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] },
+  { pseudo: "special", name: "Revisión de recetas", roles: ['farma'] },
+  { pseudo: "waiting", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
+  { pseudo: "admin", name: "Dashboard", roles: ['admin'] }
 ];
 
 const STATIC_PRESCRIPTION_STATUS = [
-  { id: "Backlog", name: "En Cola", roles: ["tecnico", "admin"] },
+  { id: "Backlog", name: "En proceso de acopio", roles: ["tecnico", "admin"] },
   {
     id: "In Progress",
-    name: "En Proceso",
+    name: "Revisión",
     roles: ["farma", "tecnico", "admin"]
   },
-  { id: "Completed", name: "Completado", roles: ["tecnico", "admin"] },
   {
     id: "Waiting",
-    name: "Por Aprobar",
-    roles: ["secretaria", "farma", "admin"]
+    name: "En proceso de revisión",
+    roles: ["tecnico", "secretaria", "farma", "admin"]
   },
-  { id: "Approved", name: "Aprobado", roles: ["farma", "admin"] },
+  { id: "Approved", name: "Empacable", roles: ["farma", "admin"] },
+  { id: "Deliverable", name: "Entregable", roles: ["secretaria", "admin"] },
   { id: "Delivered", name: "Entregado", roles: ["secretaria", "admin"] }
 ];
 
 class PrescriptionHelper {
-  getLines() {
-    return STATIC_QUEUE_LIST;
+  getLines(role) {
+    let lines = []
+
+    STATIC_QUEUE_LIST.map(queue => {
+      if (queue.roles.indexOf(role) >= 0) {
+        lines.push(queue)
+      }
+
+      return queue
+    })
+
+    return lines;
   }
 
   getStatusByRole(role) {
@@ -111,10 +124,10 @@ class PrescriptionHelper {
     let result = ''
     const status = STATIC_PRESCRIPTION_STATUS.find(status => status.id = statusId)
 
-    if(status) {
+    if (status) {
       result = status.name
     }
-    
+
     return result
   }
 

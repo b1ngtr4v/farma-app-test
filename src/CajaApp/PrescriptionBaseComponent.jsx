@@ -15,7 +15,8 @@ class PrescriptionBaseComponent extends Component {
                 category: null,
                 queue: null,
                 createdDate: null,
-                status: 'Backlog'
+                status: 'Backlog',
+                owner: ''
             },
             comment: '',
             customSave: {
@@ -95,7 +96,7 @@ class PrescriptionBaseComponent extends Component {
         })
 
         if (!incompleted) {
-            prescription.status = "Completed"
+            prescription.status = "Waiting"
         }
 
         this.setState({ prescription })
@@ -118,6 +119,10 @@ class PrescriptionBaseComponent extends Component {
         prescription.comments = null
         let updateError = null
         let updateSuccess = false
+
+        if(prescription.status === "Waiting") {
+            prescription.owner = ''
+        }
 
         if (PrescriptionService.update(prescription)) {
             updateSuccess = true
