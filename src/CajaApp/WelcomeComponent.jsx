@@ -50,7 +50,7 @@ class WelcomeComponent extends Component {
             </div>
           )}
           {this.state.showSelect && <p>Seleccione la l&iacute;nea de acopio</p>}
-          {!this.state.showSelect && <p>Ingrese al dashboard para ver las recetas por atender</p>}
+          {!this.state.showSelect && <p>Selecione la l&iacute;nea de revisi&oacute;n</p>}
           {this.state.lines.map(line => {
             return (
               <button
