@@ -27,6 +27,7 @@ class PrescriptionsComponent extends Component {
   }
 
   render() {
+    const showStatus = ['farma', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0
     return (
       <div className="domain">
         <h2>Mis recetas</h2>
@@ -49,7 +50,7 @@ class PrescriptionsComponent extends Component {
                 <tr>
                   <th># consecutivo</th>
                   <th>Categor&iacute;a</th>
-                  <th>L&iacute;nea</th>
+                  {!showStatus && <th>L&iacute;nea</th>}
                   <th>Acciones</th>
                 </tr>
               </thead>
@@ -62,9 +63,9 @@ class PrescriptionsComponent extends Component {
                         prescription.category
                       )}
                     </td>
-                    <td>
+                    {!showStatus && <td>
                       {PrescriptionHelper.getQueueName(prescription.queue)}
-                    </td>
+                    </td>}
                     <td>
                       <button
                         type="button"
