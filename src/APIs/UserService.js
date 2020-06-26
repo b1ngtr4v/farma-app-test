@@ -42,6 +42,28 @@ export let STATIC_USER_INFORMATION = [
     job: "Acopiador",
     role: "tecnico",
     currentPassword: "pass"
+  },
+  {
+    username: "crodriguez",
+    name: "Camilo",
+    lastname: "Rodriguez",
+    ident: "06-0114-0106",
+    phone: "3712-1114",
+    mail: "cridriguez@ccss.go.cr",
+    job: "Farmacia",
+    role: "secretaria",
+    currentPassword: "pass"
+  },
+  {
+    username: "clira",
+    name: "Carmen",
+    lastname: "Lira",
+    ident: "01-0274-0386",
+    phone: "7453-1014",
+    mail: "clira@ccss.go.cr",
+    job: "Escritora",
+    role: "ventana",
+    currentPassword: "pass"
   }
 ];
 
