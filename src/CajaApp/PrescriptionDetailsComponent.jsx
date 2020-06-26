@@ -45,7 +45,7 @@ class PrescriptionDetailsComponent extends Component {
 			delete prescription.medicates;
 		}
 
-		if (['secretaria', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
+		if (['ventana', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
 			role = true
 		}
 
@@ -65,8 +65,7 @@ class PrescriptionDetailsComponent extends Component {
 		// Update prescription category
 		if (PrescriptionService.updateCategory(this.state.id, btoa(prescription.category))) {
 			setTimeout(() => {
-				this.setState({ updateSuccess: true })
-				this.setState({ disable: false })
+				this.setState({ updateSuccess: true, disable: false })
 			}, 500)
 		}
 	}
@@ -151,7 +150,7 @@ class PrescriptionDetailsComponent extends Component {
 				</div>
 				<div className="container col-xs-12 col-sm-12 col-md-6 col-lg-6">
 					{canTake && <button type="button" className="btn btn-success float-right mb-2" onClick={this.setAssigned} disabled={this.state.disable}>Asignarme</button>}
-					{!canTake && <button type="button" className="btn btn-danger float-right mb-2" disabled>Ya Asignado</button>}
+					{!canTake && !this.state.role && <button type="button" className="btn btn-danger float-right mb-2" disabled>Ya Asignado</button>}
 					<form>
 						<div className="m-2">
 							{this.state.drugs && this.state.drugs.map((drug, index) => {

@@ -9,8 +9,9 @@ class HeaderComponent extends Component {
     const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
     const role = AuthenticationService.getLoggedInUserRole()
     const isUserAdmin = isUserLoggedIn && role === "admin";
-    const isUserSecretaria = isUserLoggedIn && role === "secretaria";
-    const showLine = ['farma', 'secretaria', 'admin'].indexOf(role) < 0;
+    const isUserSecretaria = isUserLoggedIn && ['secretaria', 'ventana'].indexOf(role) >= 0;
+    const showLine = ['ventana', 'farma', 'secretaria', 'admin'].indexOf(role) < 0;
+    const hideDashboard = 'secretaria' === role
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light caja-color">
@@ -33,11 +34,11 @@ class HeaderComponent extends Component {
         {isUserLoggedIn && (
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
-              <li className="nav-item">
+              {!hideDashboard && <li className="nav-item">
                 <NavLink to="/dashboard" className="nav-link">
                   Dashboard
                 </NavLink>
-              </li>
+              </li>}
               {showLine && <li className="nav-item">
                 <NavLink to="/bienvenido" className="nav-link">
                   Linea

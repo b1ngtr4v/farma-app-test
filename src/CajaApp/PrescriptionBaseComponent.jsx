@@ -45,6 +45,10 @@ class PrescriptionBaseComponent extends Component {
             parseInt(id)
         );
         let drugs = [];
+
+        if(prescription.owner !== AuthenticationService.getLoggedInUser()) {
+            this.props.Redirect()
+        }
         
         if (prescription) {
             drugs = prescription.medicates;
@@ -235,8 +239,8 @@ class PrescriptionBaseComponent extends Component {
                             {!this.state.drugs && <div>No se obtuvo informaci&oacute;n sobre esta receta</div>}
                         </div>
                         {this.state.drugs && <div className="row mb-2 text-left">
-                            <div className="col-xs-12 col-sm-12 col-md-8 col-lg-8"></div>
-                            <div className="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7"></div>
+                            <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5">
                                 <label htmlFor="prescription-status">Estado</label>
                                 <select className="form-control" id="prescription-status" value={this.state.prescription.status} disabled>
                                     {

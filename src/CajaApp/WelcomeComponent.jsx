@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import AuthenticationService from "./../APIs/AuthenticationService.js";
 import PrescriptionLineService from "./../APIs/PrescriptionLineService.js";
 import PrescriptionHelper from "../Helpers/PrescriptionHelper.js";
+import LimitDashboardComponent from './LimitDashboardComponent'
 
 class WelcomeComponent extends Component {
   constructor(props) {
@@ -12,7 +13,8 @@ class WelcomeComponent extends Component {
       username: "",
       name: "",
       showSelect: false,
-      error: false
+      error: false,
+      basicDashboard: false
     };
 
     this.setLine = this.setLine.bind(this);
@@ -20,17 +22,23 @@ class WelcomeComponent extends Component {
 
   componentDidMount() {
     let error = false;
-    let role = AuthenticationService.getLoggedInUserRole()
+    let role = AuthenticationService.getLoggedInUserRole();
+    let basicDashboard = false;
 
     if (this.props.match.params.status) {
       error = true;
+    }
+
+    if (role === 'secretaria') {
+      basicDashboard = true;
     }
 
     this.setState({
       username: AuthenticationService.getLoggedInUser(),
       error,
       lines: PrescriptionHelper.getLines(role),
-      showSelect: role === 'tecnico'
+      showSelect: role === 'tecnico',
+      basicDashboard
     });
   }
 
@@ -43,7 +51,7 @@ class WelcomeComponent extends Component {
     return (
       <div className="domain">
         <h2>Bienvenido(a), {AuthenticationService.getLoggedInUserName()}!</h2>
-        <div className="container">
+        {!this.state.basicDashboard && <div className="container">
           {this.state.error && (
             <div className="alert alert-warning" role="alert">
               Seleccione una l&iacute;nea de trabajo
@@ -65,7 +73,10 @@ class WelcomeComponent extends Component {
               </button>
             );
           })}
-        </div>
+        </div>}
+        {this.state.basicDashboard && <div className="container">
+          <LimitDashboardComponent />
+        </div>}
       </div>
     );
   }

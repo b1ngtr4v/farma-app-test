@@ -19,6 +19,7 @@ class DashboardComponent extends Component {
       },
       showStatus: false,
       showImport: false,
+      isNonMaker: false,
       timeoutId: null
     };
 
@@ -31,12 +32,15 @@ class DashboardComponent extends Component {
 
     if (role === 'tecnico' && PrescriptionLineService.getPrescriptionLine() === "none") {
       this.props.history.push("/bienvenido/" + btoa("error"));
+    } else if (role === 'secretaria') {
+      this.props.history.push("/bienvenido");
     }
 
     const showStatus = ['farma', 'admin'].indexOf(role) >= 0
-    const showImport = ['tecnico', 'secretaria', 'admin'].indexOf(role) >= 0
+    const showImport = ['tecnico', 'admin'].indexOf(role) >= 0
+    const isNonMaker = ['secretaria'].indexOf(role) >= 0
 
-    this.setState({ showStatus, showImport })
+    this.setState({ showStatus, showImport, isNonMaker })
     this.getTasks(role)
   }
 
@@ -49,20 +53,22 @@ class DashboardComponent extends Component {
   }
 
   getTasks(role) {
-    const line = PrescriptionLineService.getPrescriptionLine()
-    const prescriptions = PrescriptionService.getAllPrescriptionListByRole(role, line)
-    const records = {
-      totalToday: PrescriptionService.getRecordsLogByStatus("total"),
-      attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
-      normalTime: PrescriptionService.getTimeByLine("normal"),
-      fastTime: PrescriptionService.getTimeByLine("fast")
-    };
+    if (!this.state.isNonMaker) {
+      const line = PrescriptionLineService.getPrescriptionLine()
+      const prescriptions = PrescriptionService.getAllPrescriptionListByRole(role, line)
+      const records = {
+        totalToday: PrescriptionService.getRecordsLogByStatus("total"),
+        attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
+        normalTime: PrescriptionService.getTimeByLine("normal"),
+        fastTime: PrescriptionService.getTimeByLine("fast")
+      }
 
-    const timeoutId = setTimeout(() => {
-      this.getTasks(role)
-    }, 180000)
+      const timeoutId = setTimeout(() => {
+        this.getTasks(role)
+      }, 240000)
 
-    this.setState({ prescriptions, records, timeoutId })
+      this.setState({ records, prescriptions, timeoutId })
+    }
   }
 
   render() {
@@ -144,8 +150,7 @@ class DashboardComponent extends Component {
                     <tr>
                       <th># consecutivo</th>
                       <th>Categor&iacute;a</th>
-                      {!this.state.showStatus && <th>L&iacute;nea</th>}
-                      {!this.state.showStatus && <th>Estado</th>}
+                      <th>L&iacute;nea</th>
                       <th>Acciones</th>
                     </tr>
                   </thead>
@@ -158,12 +163,9 @@ class DashboardComponent extends Component {
                             prescription.category
                           )}
                         </td>
-                        {!this.state.showStatus && <td>
+                        <td>
                           {PrescriptionHelper.getQueueName(prescription.queue)}
-                        </td>}
-                        {!this.state.showStatus && <td>
-                          {PrescriptionHelper.getStatusName(prescription.status)}
-                        </td>}
+                        </td>
                         <td>
                           <button
                             type="button"

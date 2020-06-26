@@ -15,6 +15,12 @@ class PrescriptionsComponent extends Component {
   }
 
   componentDidMount() {
+    const role = AuthenticationService.getLoggedInUserRole()
+    
+    if (['secretaria', 'ventana'].indexOf(role) >= 0) {
+      this.props.history.push("/bienvenido");
+    }
+
     this.setState({
       prescriptions: PrescriptionService.getPrescriptionListByUser(
         AuthenticationService.getLoggedInUser()
