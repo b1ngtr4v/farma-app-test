@@ -13,7 +13,7 @@ const STATIC_QUEUE_LIST = [
   { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] },
   { pseudo: "waiting", name: "Revisión de recetas", roles: ['farma'] },
   { pseudo: "special", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
-  { pseudo: "admin", name: "Dashboard", roles: ['admin'] }
+  { pseudo: "admin", name: "Dashboard", roles: ['ventana', 'admin'] }
 ];
 
 const STATIC_PRESCRIPTION_STATUS = [
