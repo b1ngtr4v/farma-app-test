@@ -1,15 +1,15 @@
 import React, { Component } from "react";
+import UserHelper from "../Helpers/UserHelper.js";
+import LimitDashboardComponent from './LimitDashboardComponent';
 import AuthenticationService from "./../APIs/AuthenticationService.js";
 import PrescriptionLineService from "./../APIs/PrescriptionLineService.js";
-import PrescriptionHelper from "../Helpers/PrescriptionHelper.js";
-import LimitDashboardComponent from './LimitDashboardComponent'
 
 class WelcomeComponent extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      lines: [],
+      actions: [],
       username: "",
       name: "",
       showSelect: false,
@@ -17,13 +17,15 @@ class WelcomeComponent extends Component {
       basicDashboard: false
     };
 
-    this.setLine = this.setLine.bind(this);
+    this.setUserAction = this.setUserAction.bind(this);
   }
 
   componentDidMount() {
     let error = false;
     let role = AuthenticationService.getLoggedInUserRole();
     let basicDashboard = false;
+
+    PrescriptionLineService.unregisterPrescriptionLine();
 
     if (this.props.match.params.status) {
       error = true;
@@ -36,15 +38,21 @@ class WelcomeComponent extends Component {
     this.setState({
       username: AuthenticationService.getLoggedInUser(),
       error,
-      lines: PrescriptionHelper.getLines(role),
+      actions: UserHelper.getActionsByRole(role),
       showSelect: role === 'tecnico',
       basicDashboard
     });
   }
 
-  setLine(e) {
-    PrescriptionLineService.registerPrescriptionLine(e.target.id);
-    this.props.history.push("/dashboard");
+  setUserAction(e) {
+    const action = e.target.id
+    PrescriptionLineService.registerUserAction(action);
+
+    if (action === 'normal') {
+      this.props.history.push("/linea");
+    } else {
+      this.props.history.push("/dashboard");
+    }
   }
 
   render() {
@@ -54,18 +62,18 @@ class WelcomeComponent extends Component {
         {!this.state.basicDashboard && <div className="container">
           {this.state.error && (
             <div className="alert alert-warning" role="alert">
-              Seleccione una l&iacute;nea de trabajo
+              Debe seleccionar una acci&oacute;n
             </div>
           )}
-          {this.state.showSelect && <p>Seleccione la l&iacute;nea de acopio</p>}
+          {this.state.showSelect && <p>Seleccione la acci&oacute;n a realizar</p>}
           {!this.state.showSelect && <p>Selecione la l&iacute;nea de revisi&oacute;n</p>}
-          {this.state.lines.map(line => {
+          {this.state.actions.map(line => {
             return (
               <button
                 type="button"
                 className="btn btn-success col-xs-8 col-sm-8 col-md-5 col-lg-5 m-1"
                 style={{ padding: "15px" }}
-                onClick={this.setLine}
+                onClick={this.setUserAction}
                 id={line.pseudo}
                 key={line.pseudo}
               >

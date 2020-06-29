@@ -6,7 +6,7 @@ import AuthenticationService from "../APIs/AuthenticationService.js"
 
 class PrescriptionBaseComponent extends Component {
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             id: 0,
@@ -24,96 +24,113 @@ class PrescriptionBaseComponent extends Component {
                 customTitle: null,
                 customSaveMsg: null
             },
-            status: PrescriptionHelper.getStatusByRole(AuthenticationService.getLoggedInUserRole()),
+            status: [],
+            statusName: 'Por acopiar',
+            statusDisabled: false,
             changed: false,
             disable: false,
             updateSuccess: false,
             updateError: false
         }
 
-        this.savePrescription = this.savePrescription.bind(this)
-        this.handleTextChange = this.handleTextChange.bind(this)
+        this.savePrescription = this.savePrescription.bind(this);
+        this.handleTextChange = this.handleTextChange.bind(this);
+        this.findStatusName = this.findStatusName.bind(this);
     }
 
     componentDidMount() {
         if (this.props.ModalSettings) {
-            this.setState({ customSave: this.props.ModalSettings })
+            this.setState({ customSave: this.props.ModalSettings });
         }
+
+        const status = this.props.statusSettings.status;
+        const statusDisabled = this.props.statusSettings.disabled;
 
         const id = atob(this.props.PrescriptionId);
-        let prescription = PrescriptionService.getPrescriptionListById(
-            parseInt(id)
-        );
+        let prescription = PrescriptionService.getPrescriptionListById(parseInt(id));
         let drugs = [];
 
-        if(prescription.owner !== AuthenticationService.getLoggedInUser()) {
-            this.props.Redirect()
+        if (prescription.owner !== AuthenticationService.getLoggedInUser()) {
+            this.props.Redirect();
         }
-        
+
         if (prescription) {
             drugs = prescription.medicates;
             delete prescription.medicates;
         }
 
-        this.setState({ id, drugs, prescription });
+        const statusName = this.findStatusName(prescription.status)
+
+        this.setState({ id, drugs, prescription, status, statusDisabled, statusName });
     }
 
     handleTextChange(e) {
-        const type = e.target.id.split('-')
-        let actVarName
-        let actVar
+        const type = e.target.id.split('-');
+        let actVarName = null;
+        let actVar = null;
 
         switch (type[0]) {
             case 'prescription':
-                actVarName = 'prescription'
-                actVar = { ...this.state.prescription }
-                actVar[type[1]] = e.target.value
+                actVarName = 'prescription';
+                actVar = { ...this.state.prescription };
+                actVar[type[1]] = e.target.value;
                 break
             case 'medicate':
-                actVarName = 'drugs'
-                actVar = [...this.state.drugs]
-                actVar[type[1]].checked = e.target.checked
+                actVarName = 'drugs';
+                actVar = [...this.state.drugs];
+                actVar[type[1]].checked = e.target.checked;
                 break
             default:
-                actVarName = type[0]
-                actVar = e.target.value
+                actVarName = type[0];
+                actVar = e.target.value;
         }
 
         this.setState({
             [actVarName]: actVar
-        }, this.UpdateStatus())
+        }, this.UpdateStatus());
     }
 
     UpdateStatus() {
-        let prescription = this.state.prescription
-        prescription.status = "Backlog"
-        const drugs = this.state.drugs
-        let incompleted = false
+        let prescription = this.state.prescription;
+        const drugs = this.state.drugs;
+        let statusCode = 'Empty';
+        let incompleted = false;
 
         // eslint-disable-next-line
         drugs.map(drug => {
             if (!incompleted && !drug.checked) {
-                incompleted = true
-            } else if (drug.checked && prescription.status !== "In Progress") {
-                prescription.status = "In Progress"
+                incompleted = true;
+            } else if (drug.checked && statusCode !== 'Mid') {
+                statusCode = 'Mid';
             }
         })
 
         if (!incompleted) {
-            prescription.status = "Waiting"
+            statusCode = 'Full';
         }
 
-        this.setState({ prescription })
+        prescription.status = this.props.statusHandler(statusCode);
+        const statusName = this.findStatusName(prescription.status)
+        
+        this.setState({ prescription, statusName });
     }
 
-    executeBack() {
+    findStatusName(statusCode) {
+        let result = this.state.statusName
+        const actStatus = this.state.status.find(element => element.id === statusCode);
 
+        if(actStatus) {
+            result = actStatus.name
+        }
+        
+        return result
     }
 
     savePrescription(e) {
         e.preventDefault()
+        let disable = true
 
-        this.setState({ disable: true, updateSuccess: false, updateError: null })
+        this.setState({ disable, updateSuccess: false, updateError: null })
         $('#customModal').modal('hide');
 
         let prescription = { ...this.state.prescription }
@@ -124,7 +141,7 @@ class PrescriptionBaseComponent extends Component {
         let updateError = null
         let updateSuccess = false
 
-        if(prescription.status === "Waiting") {
+        if (this.props.releaseOwner(prescription.status)) {
             prescription.owner = ''
         }
 
@@ -136,10 +153,11 @@ class PrescriptionBaseComponent extends Component {
             }, 2500)
         } else {
             updateError = 'No actualizado'
+            disable = false
             console.log(updateError)
         }
 
-        this.setState({ updateSuccess, updateError })
+        this.setState({ updateSuccess, updateError, disable })
     }
 
     render() {
@@ -176,7 +194,8 @@ class PrescriptionBaseComponent extends Component {
                                         </button>
                                     </div>
                                     <div className="modal-body">
-                                        {this.state.customSave.customSaveMsg}
+                                        <p>{this.state.customSave.customSaveMsg}</p>
+                                        <p><strong>{this.findStatusName(this.state.prescription.status)}</strong></p>
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -242,7 +261,7 @@ class PrescriptionBaseComponent extends Component {
                             <div className="col-xs-12 col-sm-12 col-md-7 col-lg-7"></div>
                             <div className="col-xs-12 col-sm-12 col-md-5 col-lg-5">
                                 <label htmlFor="prescription-status">Estado</label>
-                                <select className="form-control" id="prescription-status" value={this.state.prescription.status} disabled>
+                                <select className="form-control" id="prescription-status" value={this.state.prescription.status} onChange={this.handleTextChange} disabled={this.state.statusDisabled}>
                                     {
                                         this.state.status.map((status, index) => {
                                             return <option value={status.id} key={index}>{status.name}</option>

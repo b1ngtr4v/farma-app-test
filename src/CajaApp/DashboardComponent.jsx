@@ -19,7 +19,6 @@ class DashboardComponent extends Component {
       },
       showStatus: false,
       showImport: false,
-      isNonMaker: false,
       timeoutId: null
     };
 
@@ -28,20 +27,21 @@ class DashboardComponent extends Component {
   }
 
   componentDidMount() {
+    const action = PrescriptionLineService.getUserAction()
     const role = AuthenticationService.getLoggedInUserRole()
+    const line = PrescriptionLineService.getPrescriptionLine()
 
-    if (role === 'tecnico' && PrescriptionLineService.getPrescriptionLine() === "none") {
-      this.props.history.push("/bienvenido/" + btoa("error"));
-    } else if (role === 'secretaria') {
-      this.props.history.push("/bienvenido");
+    if (action === 'normal' && line === "none") {
+      this.props.history.push("/linea/" + btoa("error"));
+    } else if (role === 'secretaria' || action === 'none') {
+      this.props.history.push("/bienvenido/" + btoa('error'));
     }
 
-    const showStatus = ['farma', 'admin'].indexOf(role) >= 0
-    const showImport = ['tecnico', 'admin'].indexOf(role) >= 0
-    const isNonMaker = ['secretaria'].indexOf(role) >= 0
+    const showStatus = ['tecnico', 'admin'].indexOf(role) >= 0
+    const showImport = ['ventana', 'admin'].indexOf(action) >= 0
 
-    this.setState({ showStatus, showImport, isNonMaker })
-    this.getTasks(role)
+    this.setState({ showStatus, showImport })
+    this.getTasks(action, line)
   }
 
   componentWillUnmount() {
@@ -52,23 +52,20 @@ class DashboardComponent extends Component {
     this.props.history.push(`/receta/detalles/${btoa(id)}`);
   }
 
-  getTasks(role) {
-    if (!this.state.isNonMaker) {
-      const line = PrescriptionLineService.getPrescriptionLine()
-      const prescriptions = PrescriptionService.getAllPrescriptionListByRole(role, line)
-      const records = {
-        totalToday: PrescriptionService.getRecordsLogByStatus("total"),
-        attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
-        normalTime: PrescriptionService.getTimeByLine("normal"),
-        fastTime: PrescriptionService.getTimeByLine("fast")
-      }
+  getTasks(action, line) {
+    let prescriptions = PrescriptionService.getAllPrescriptionListByAction(action, line)
+    let timeoutId = setTimeout(() => {
+      this.getTasks(action, line)
+    }, 180000)
 
-      const timeoutId = setTimeout(() => {
-        this.getTasks(role)
-      }, 240000)
-
-      this.setState({ records, prescriptions, timeoutId })
+    const records = {
+      totalToday: PrescriptionService.getRecordsLogByStatus("total"),
+      attendedToday: PrescriptionService.getRecordsLogByStatus("completed"),
+      normalTime: PrescriptionService.getTimeByLine("normal"),
+      fastTime: PrescriptionService.getTimeByLine("fast")
     }
+
+    this.setState({ records, prescriptions, timeoutId })
   }
 
   render() {
@@ -109,9 +106,7 @@ class DashboardComponent extends Component {
                   >
                     {this.state.records.fastTime}
                   </button>
-                  <p>
-                    Tiempo estimado de preparación l&iacute;nea r&aacute;pida
-                  </p>
+                  <p>Tiempo estimado recetas urgentes</p>
                 </div>
                 <div className="col-sm">
                   <button
@@ -121,9 +116,7 @@ class DashboardComponent extends Component {
                   >
                     {this.state.records.normalTime}
                   </button>
-                  <p>
-                    Tiempo estimado de preparación l&iacute;nea alto volumen
-                  </p>
+                  <p>Tiempo estimado recetas no urgentes</p>
                 </div>
               </div>
             </div>

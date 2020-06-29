@@ -1,30 +1,44 @@
-import React, { Component } from 'react'
-import PrescriptionBaseComponent from './PrescriptionBaseComponent.jsx'
+import React, { Component } from 'react';
+import PrescriptionFarma from './PrescriptionFarmaComponent.jsx';
+import PrescriptionAcopia from './PrescriptionAcopiaComponent.jsx';
+import PrescriptionLineService from '../APIs/PrescriptionLineService.js';
+import PrescriptionPost from './PrescriptionPostComponent.jsx';
+
 
 class PrescriptionComponent extends Component {
 	constructor(props) {
 		super(props)
 
-		this.state = {
-			userRole: '',
-			modal: {
-				showMsg: true,
-				customTitle: "Guardar receta",
-				customSaveMsg: "La receta se guardará con el estado actual"
-			}
-		}
-
-		this.goBack = this.goBack.bind(this)
+		this.redirect = this.redirect.bind(this)
 	}
 
-	goBack() {
-		this.props.history.push('/recetas')
+	redirect() {
+		this.props.history.push('/dashboard')
 	}
 
 	render() {
-		return (
-			<PrescriptionBaseComponent Redirect={this.goBack} PrescriptionId={this.props.match.params.id} ModalSettings={this.state.modal}/>
-		)
+		let currentComponent = null;
+		const userAction = PrescriptionLineService.getUserAction()
+
+		switch (userAction) {
+			case 'normal':
+				currentComponent = <PrescriptionAcopia Id={this.props.match.params.id} Redirect={this.redirect} />;
+				break;
+
+			case 'waiting': case 'special':
+				currentComponent = <PrescriptionFarma Id={this.props.match.params.id} Redirect={this.redirect} />;
+				break;
+
+			case 'empaque': case 'entrega':
+				currentComponent = <PrescriptionPost Id={this.props.match.params.id} Redirect={this.redirect} Action={userAction}/>;
+				break;
+
+			default:
+				currentComponent = null;
+				break;
+		}
+
+		return currentComponent;
 	}
 }
 

@@ -60,11 +60,11 @@ class LimitDashboardComponent extends Component {
 							<div className="row mt-2">
 								<div className="col-sm">
 									<button type="button" className="btn btn-secundary btn-caja" readOnly>{this.state.records.fastTime}</button>
-									<p>Tiempo estimado de preparación l&iacute;nea r&aacute;pida</p>
+									<p>Tiempo estimado recetas urgentes</p>
 								</div>
 								<div className="col-sm">
 									<button type="button" className="btn btn-secundary btn-caja" readOnly>{this.state.records.normalTime}</button>
-									<p>Tiempo estimado de preparación l&iacute;nea alto volumen</p>
+									<p>Tiempo estimado recetas no urgentes</p>
 								</div>
 							</div>
 						</div>

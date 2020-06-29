@@ -17,6 +17,7 @@ import UserDetails from './UserDetailsComponent'
 import Users from './UsersComponent'
 import Password from './UserPasswordComponent'
 import PasswordRecovery from './PasswordRecoveryComponent'
+import LineSelector from './LineSelectorComponent'
 
 import '../css/Caja.css'
 
@@ -31,6 +32,7 @@ class CajaComponent extends Component {
                         <Route path="/login" component={Login} />
                         <Route path="/recuperar" component={PasswordRecovery} />
                         <AuthenticatedRoute path="/bienvenido/:status?" component={Welcome} />
+                        <AuthenticatedRoute path="/linea" component={LineSelector} />
                         <AuthenticatedRoute path="/dashboard" component={Dashboard} />
                         <AuthenticatedRoute path="/receta/detalles/:id" component={PrescriptionDetails} />
                         <AuthenticatedRoute path="/recetas" component={Prescriptions} />

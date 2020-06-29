@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import PrescriptionService from "./../APIs/PrescriptionService.js";
 import PrescriptionHelper from "./../Helpers/PrescriptionHelper.js";
 import AuthenticationService from '../APIs/AuthenticationService.js'
+import PrescriptionLineService from '../APIs/PrescriptionLineService.js';
 
 class PrescriptionDetailsComponent extends Component {
 	constructor(props) {
@@ -35,24 +36,23 @@ class PrescriptionDetailsComponent extends Component {
 		let role = false
 		let asign = false
 		const id = atob(this.props.match.params.id);
-		let prescription = PrescriptionService.getPrescriptionListById(
-			parseInt(id)
-		);
+		let prescription = PrescriptionService.getPrescriptionListById(parseInt(id));
 		let drugs = [];
-
+		const action = PrescriptionLineService.getUserAction();
+		
 		if (prescription) {
 			drugs = prescription.medicates;
 			delete prescription.medicates;
 		}
 
-		if (['ventana', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
+		if (['ventana', 'admin'].indexOf(action) >= 0) {
 			role = true
 		}
 
-		if (['tecnico', 'farma', 'admin'].indexOf(AuthenticationService.getLoggedInUserRole()) >= 0) {
+		if (['normal', 'empaque', 'entrega', 'special', 'waiting', 'admin'].indexOf(action) >= 0) {
 			asign = true
 		}
-
+		
 		this.setState({ id, drugs, prescription, role, asign });
 	}
 
@@ -72,9 +72,13 @@ class PrescriptionDetailsComponent extends Component {
 
 	setAssigned() {
 		this.setState({ updateSuccess: false, updateError: false })
-		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUser()))) {
-			this.setState({ updateSuccess: true, asign: false })
-			
+		let updateSuccess = false
+		let asign = false
+		let updateError = false
+
+		if (PrescriptionService.updateOwner(this.state.id, btoa(AuthenticationService.getLoggedInUser()), btoa(PrescriptionLineService.getUserAction()))) {
+			updateSuccess = true
+
 			setTimeout(() => {
 				this.props.history.push(`/receta/${btoa(this.state.id)}`)
 			}, 1000)
@@ -86,7 +90,12 @@ class PrescriptionDetailsComponent extends Component {
 				$('#customModal').modal('show');
 			}, 500)
 			*/
+		} else {
+			updateError = true
+			asign = true
 		}
+
+		this.setState({ updateSuccess, asign, updateError })
 	}
 
 	atend() {
@@ -125,6 +134,48 @@ class PrescriptionDetailsComponent extends Component {
 							</div>
 						</div>
 					</div>
+					<div className="modal fade" id="helpModal" tabIndex="-1" role="dialog" aria-labelledby="helpModalLabel" aria-hidden="true">
+						<div className="modal-dialog" role="document">
+							<div className="modal-content">
+								<div className="modal-header">
+									<h5 className="modal-title" id="helpModalLabel">Criterios recetas urgentes</h5>
+									<button type="button" className="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div className="modal-body">
+									<div className="row text-left">
+										<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+											<h4>S&iacute;ntomas:</h4>
+											<ul>
+												<li>Diarrea</li>
+												<li>Fiebre</li>
+												<li>Dolor</li>
+											</ul>
+											<br />
+											<h4>Medicamento tipo:</h4>
+											<ul>
+												<li>Antibi&oacute;tico</li>
+											</ul>
+										</div>
+										<div className="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+											<h4>Persona:</h4>
+											<ul>
+												<li>Privada de libertad</li>
+												<li>Con autismo</li>
+												<li>Con par&aacute;lisis cerebral infantil</li>
+												<li>Procedimiento quir&uacute;rgico</li>
+												<li>Necesidades personales (lejan&iacute;a, horario de los buses)</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div className="modal-footer">
+									<button type="button" className="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div className="row mt-4 text-left">
 						<div className="col-sm-6 col-md-6">
 							{!this.state.role && <p><b>Categor&iacute;a</b>: {PrescriptionHelper.getCategoryName(this.state.prescription.category)}</p>}
@@ -136,6 +187,7 @@ class PrescriptionDetailsComponent extends Component {
 									})
 								}
 							</select>}
+							{this.state.role && <button type="button" className="btn btn-primary btn-sm rounded-circle ml-1" data-toggle="modal" data-target="#helpModal">?</button>}
 						</div>
 						<div className="col-sm-6 col-md-6">
 							<p><b>L&iacute;nea</b>: {PrescriptionHelper.getQueueName(this.state.prescription.queue)}</p>

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import PrescriptionService from "./../APIs/PrescriptionService.js";
 import PrescriptionHelper from "./../Helpers/PrescriptionHelper.js";
 import AuthenticationService from "./../APIs/AuthenticationService.js";
+import PrescriptionLineService from "../APIs/PrescriptionLineService.js";
 
 class PrescriptionsComponent extends Component {
   constructor(props) {
@@ -15,10 +16,10 @@ class PrescriptionsComponent extends Component {
   }
 
   componentDidMount() {
-    const role = AuthenticationService.getLoggedInUserRole()
-    
-    if (['secretaria', 'ventana'].indexOf(role) >= 0) {
-      this.props.history.push("/bienvenido");
+    const action = PrescriptionLineService.getUserAction();
+
+    if (['normal', 'special', 'waiting', 'admin'].indexOf(action) < 0) {
+      this.props.history.push("/dashboard");
     }
 
     this.setState({

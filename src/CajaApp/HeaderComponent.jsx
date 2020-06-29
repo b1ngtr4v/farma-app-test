@@ -1,17 +1,19 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
 import { Link, NavLink } from "react-router-dom";
-import "./../css/Header.css";
 import AuthenticationService from "./../APIs/AuthenticationService.js";
+import "./../css/Header.css";
+import PrescriptionLineService from "../APIs/PrescriptionLineService.js";
 
 class HeaderComponent extends Component {
   render() {
     const isUserLoggedIn = AuthenticationService.isUserLoggedIn();
-    const role = AuthenticationService.getLoggedInUserRole()
-    const isUserAdmin = isUserLoggedIn && role === "admin";
-    const isUserSecretaria = isUserLoggedIn && ['secretaria', 'ventana'].indexOf(role) >= 0;
-    const showLine = ['ventana', 'farma', 'secretaria', 'admin'].indexOf(role) < 0;
-    const hideDashboard = 'secretaria' === role
+    const role = AuthenticationService.getLoggedInUserRole();
+    const action = PrescriptionLineService.getUserAction();
+    const isUserAdmin = role === "admin";
+    const showRecetas = role !== "secretaria" && ['ventana','empaque','entrega'].indexOf(action) < 0;
+    const showLine = ['normal', 'admin'].indexOf(action) >= 0;
+    const showDashboard = 'secretaria' !== role;
 
     return (
       <nav className="navbar navbar-expand-lg navbar-light caja-color">
@@ -34,17 +36,17 @@ class HeaderComponent extends Component {
         {isUserLoggedIn && (
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
-              {!hideDashboard && <li className="nav-item">
+              {showDashboard && <li className="nav-item">
                 <NavLink to="/dashboard" className="nav-link">
                   Dashboard
                 </NavLink>
               </li>}
               {showLine && <li className="nav-item">
-                <NavLink to="/bienvenido" className="nav-link">
+                <NavLink to="/linea" className="nav-link">
                   Linea
                 </NavLink>
               </li>}
-              {!isUserSecretaria && (
+              {showRecetas && (
                 <li className="nav-item">
                   <NavLink to="/recetas" className="nav-link">
                     Recetas
