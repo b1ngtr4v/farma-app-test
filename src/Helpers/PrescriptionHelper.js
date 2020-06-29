@@ -10,7 +10,7 @@ const STATIC_CLASSTYPE_LIST = {
 
 const STATIC_QUEUE_LIST = [
   { pseudo: "fast", name: "Línea rápida", roles: ['tecnico',] },
-  { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] }
+  { pseudo: "normal", name: "Línea alto volumen", roles: ['tecnico'] }
 ]
 
 const STATIC_PRESCRIPTION_STATUS = [
