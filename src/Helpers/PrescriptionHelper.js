@@ -10,53 +10,35 @@ const STATIC_CLASSTYPE_LIST = {
 
 const STATIC_QUEUE_LIST = [
   { pseudo: "fast", name: "Línea rápida", roles: ['tecnico',] },
-  { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] },
-  { pseudo: "waiting", name: "Revisión de recetas", roles: ['farma'] },
-  { pseudo: "special", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
-  { pseudo: "admin", name: "Dashboard", roles: ['ventana', 'admin'] }
-];
+  { pseudo: "normal", name: "Línea alto volúmen", roles: ['tecnico'] }
+]
 
 const STATIC_PRESCRIPTION_STATUS = [
-  { id: "Backlog", name: "En proceso de acopio", roles: ["tecnico", "admin"] },
-  {
-    id: "In Progress",
-    name: "Revisión",
-    roles: ["farma", "tecnico", "admin"]
-  },
-  {
-    id: "Waiting",
-    name: "En proceso de revisión",
-    roles: ["tecnico", "secretaria", "farma", "admin"]
-  },
+  { id: "Backlog", name: "Por acopiar", roles: ["farma", "tecnico", "admin"] },
+  { id: "In Progress", name: "En proceso de acopio", roles: ["tecnico", "admin"] },
+  { id: "Waiting", name: "Por revisar", roles: ["tecnico", "secretaria", "farma", "admin"] },
   { id: "Approved", name: "Empacable", roles: ["farma", "admin"] },
-  { id: "Deliverable", name: "Entregable", roles: ["secretaria", "admin"] },
-  { id: "Delivered", name: "Entregado", roles: ["secretaria", "admin"] }
+  { id: "Deliverable", name: "Entregable", roles: ["farma", "admin"] },
+  { id: "Delivered", name: "Entregado", roles: ["tecnico", "admin"] }
 ];
 
 class PrescriptionHelper {
-  getLines(role) {
-    let lines = []
-
-    STATIC_QUEUE_LIST.map(queue => {
-      if (queue.roles.indexOf(role) >= 0) {
-        lines.push(queue)
-      }
-
-      return queue
-    })
-
-    return lines;
+  getLines() {
+    return [...STATIC_QUEUE_LIST]
   }
 
   getStatusByRole(role) {
-    // eslint-disable-next-line
-    return STATIC_PRESCRIPTION_STATUS.map(status => {
+    const statusList = [...STATIC_PRESCRIPTION_STATUS]
+    
+    return statusList.map(status => {
       if (status.roles.indexOf(role) >= 0) {
         const act = { ...status };
         delete act.roles;
 
         return act;
       }
+
+      return null;
     }).filter(x => x);
   }
 
@@ -92,7 +74,9 @@ class PrescriptionHelper {
   }
 
   getQueueName(queuePseudo) {
-    let queueName = STATIC_QUEUE_LIST.find(
+    const queueList = [...STATIC_QUEUE_LIST]
+
+    let queueName = queueList.find(
       queue => queue.pseudo === queuePseudo
     );
 
@@ -104,12 +88,13 @@ class PrescriptionHelper {
   }
 
   getCategories() {
-    return STATIC_CATEGORY_LIST;
+    return [...STATIC_CATEGORY_LIST];
   }
 
   getCategoryName(categoryId) {
     let name = "Indefinida";
-    const category = STATIC_CATEGORY_LIST.find(
+    const categoryList = [...STATIC_CATEGORY_LIST]
+    const category = categoryList.find(
       element => element.id === categoryId
     );
 
@@ -122,10 +107,11 @@ class PrescriptionHelper {
 
   getStatusName(statusId) {
     let result = ''
-    const status = STATIC_PRESCRIPTION_STATUS.find(status => status.id = statusId)
+    const statusList = [...STATIC_PRESCRIPTION_STATUS]
+    const statusFound = statusList.find(status => status.id = statusId)
 
-    if (status) {
-      result = status.name
+    if (statusFound) {
+      result = statusFound.name
     }
 
     return result

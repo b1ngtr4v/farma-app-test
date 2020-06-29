@@ -1,5 +1,5 @@
 // role definition: {id: 'farma', name: 'Farmacéutico'}
-let ROLE_LIST = [
+const ROLE_LIST = [
   {
     id: "admin",
     name: "Administrador de Sistema",
@@ -23,6 +23,16 @@ let ROLE_LIST = [
     name: "Secretaria de médicos",
     description: "Puede ver el tiempo de duración del despacho"
   }
+];
+
+const ROLE_ACTIONS = [
+  { pseudo: "normal", name: "Acopio", roles: ['tecnico'] },
+  { pseudo: "ventana", name: "Ventanilla recepción", roles: ['tecnico'] },
+  { pseudo: "empaque", name: "Empaque", roles: ['tecnico'] },
+  { pseudo: "entrega", name: "Ventanilla entrega", roles: ['tecnico'] },
+  { pseudo: "waiting", name: "Revisión de recetas", roles: ['farma'] },
+  { pseudo: "special", name: "Atención de estupefacientes y psicotrópicos", roles: ['farma'] },
+  { pseudo: "admin", name: "Dashboard", roles: ['admin'] }
 ];
 
 class UserHelper {
@@ -54,6 +64,16 @@ class UserHelper {
     });
 
     return roleId;
+  }
+
+  getActionsByRole(role) {
+    return ROLE_ACTIONS.map(action => {
+      if(action.roles.indexOf(role) >= 0) {
+        return action;
+      }
+
+      return null;
+    }).filter(x => x);
   }
 }
 
