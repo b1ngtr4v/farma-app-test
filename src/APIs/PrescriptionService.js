@@ -177,7 +177,7 @@ const STATIC_PRESCRIPTION_LIST = [
     createdDate: "2020-06-09T16:13:33.366+00:00",
     dueDate: "2020-06-09T16:13:33.366+00:00",
     owner: "",
-    status: "Backlog",
+    status: "Approved",
     medicates: [
       {
         id: 4,
@@ -368,31 +368,31 @@ class PrescriptionService {
     return STATIC_PRESCRIPTION_LIST;
   }
 
-  getAllPrescriptionListByRole(role, line) {
+  getAllPrescriptionListByAction(action, line) {
     let result
 
-    switch (role) {
-      case 'farma':
-        if (line === 'special') {
-          result = this.getPrescriptionListByLine('fast').map(prescription => {
-            if (prescription.status === 'Backlog' && prescription.owner.length === 0 && prescription.classType === 'special') {
-              return prescription;
-            } else {
-              return null;
-            }
-          }).filter(x => x);
-        } else {
-          result = this.getAllPrescriptionList().map(prescription => {
-            if (prescription.owner.length === 0 && prescription.status === 'Waiting') {
-              return prescription;
-            } else {
-              return null;
-            }
-          }).filter(x => x);
-        }
+    switch (action) {
+      case 'special':
+        result = this.getPrescriptionListByLine('fast').map(prescription => {
+          if (prescription.status === 'Backlog' && prescription.owner.length === 0 && prescription.classType === 'special') {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
         break;
 
-      case 'tecnico':
+      case 'waiting':
+        result = this.getAllPrescriptionList().map(prescription => {
+          if (prescription.owner.length === 0 && prescription.status === 'Waiting') {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
+        break;
+
+      case 'normal':
         result = this.getPrescriptionListByLine(line).map(prescription => {
           if (prescription.status === 'Backlog' && prescription.owner.length === 0 && prescription.classType !== 'special') {
             return prescription;
@@ -402,8 +402,36 @@ class PrescriptionService {
         }).filter(x => x);
         break;
 
+      case 'ventana':
+        result = this.getAllPrescriptionList();
+        break;
+
+      case 'empaque':
+        result = this.getAllPrescriptionList().map(prescription => {
+          if (prescription.status === 'Approved' && prescription.owner.length === 0) {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
+        break;
+
+      case 'entrega':
+        result = this.getAllPrescriptionList().map(prescription => {
+          if (prescription.status === 'Deliverable' && prescription.owner.length === 0) {
+            return prescription;
+          } else {
+            return null;
+          }
+        }).filter(x => x);
+        break;
+
+      case 'admin':
+        result = this.getAllPrescriptionList();
+        break;
+
       default:
-        result = this.getAllPrescriptionList()
+        result = null
         break;
     }
 
@@ -507,17 +535,60 @@ class PrescriptionService {
     return result
   }
 
-  updateOwner(id, owner) {
+  updateOwner(id, owner, action) {
     let result = true
 
     try {
       let prescription = STATIC_PRESCRIPTION_LIST.find(prescription => prescription.id === parseInt(id))
-      const index = STATIC_PRESCRIPTION_LIST.indexOf(prescription)
-      prescription.owner = atob(owner)
+      
+      if (this.setOwnerByAction(prescription.classType, prescription.status, atob(action))) {
+        const index = STATIC_PRESCRIPTION_LIST.indexOf(prescription)
+        let medicates = [...prescription.medicates]
+        prescription.owner = atob(owner)
 
-      STATIC_PRESCRIPTION_LIST[index] = prescription
+        prescription.medicates = medicates.map(medicate => {
+          medicate.checked = false
+          return medicate
+        })
+
+        STATIC_PRESCRIPTION_LIST[index] = prescription
+      } else {
+        result = false
+      }
     } catch (e) {
+      console.log(e)
       result = false
+    }
+
+    return result
+  }
+
+  setOwnerByAction(classType, status, action) {
+    let result = false
+
+    switch (action) {
+      case 'normal':
+        result = status === 'Backlog' && classType !== 'special';
+        break;
+
+      case 'special':
+        result = status === 'Backlog' && classType === 'special';
+        break;
+
+      case 'waiting':
+        result = status === 'Waiting';
+        break;
+
+      case 'empaque':
+        result = status === 'Approved';
+        break;
+
+      case 'entrega':
+        result = status === 'Deliverable';
+        break;
+
+      default:
+        break;
     }
 
     return result

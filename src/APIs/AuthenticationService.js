@@ -15,6 +15,7 @@ class AuthenticationService {
 
   registerSuccessfullLogout() {
     PrescriptionLineService.unregisterPrescriptionLine();
+    PrescriptionLineService.unregisterUserAction();
     this.registerSuccessfullLogoutUserRole();
     this.registerSuccessfullLogoutUserName();
     sessionStorage.removeItem(USERNAME_SESSION_ATTRIBUTE_NAME);

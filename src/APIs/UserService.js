@@ -62,7 +62,7 @@ export let STATIC_USER_INFORMATION = [
     phone: "7453-1014",
     mail: "clira@ccss.go.cr",
     job: "Escritora",
-    role: "ventana",
+    role: "tecnico",
     currentPassword: "pass"
   }
 ];
